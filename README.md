@@ -15,3 +15,13 @@ A structured Python learning journey from beginner to Generative AI.
 - ✅ Comparison Operators
 - ✅ Logical Operators
 - ✅ If-Else
+
+✅ Day 18
+- Learned Python Lists
+- Indexing
+- append()
+- remove()
+- pop()
+- for loop with lists
+- Student List Manager
+- Shopping List Manager
