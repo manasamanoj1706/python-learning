@@ -25,3 +25,12 @@ A structured Python learning journey from beginner to Generative AI.
 - for loop with lists
 - Student List Manager
 - Shopping List Manager
+✅ Day 20
+- Learned Tuples
+- Tuple Indexing
+- Negative Indexing
+- len()
+- count()
+- index()
+- Immutable Tuples
+- Built Student Information System using Tuples
