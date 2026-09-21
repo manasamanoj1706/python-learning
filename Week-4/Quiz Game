@@ -1,0 +1,125 @@
+# Python Quiz Game
+
+questions = [
+    {
+        "question": "Which language is mainly used for AI and Data Science?",
+        "options": ["A. HTML", "B. Python", "C. CSS", "D. SQL"],
+        "answer": "B"
+    },
+    {
+        "question": "Which data type stores key-value pairs in Python?",
+        "options": ["A. List", "B. Tuple", "C. Dictionary", "D. Set"],
+        "answer": "C"
+    },
+    {
+        "question": "Which keyword is used to define a function?",
+        "options": ["A. function", "B. define", "C. fun", "D. def"],
+        "answer": "D"
+    },
+    {
+        "question": "Which symbol is used for comments in Python?",
+        "options": ["A. //", "B. #", "C. /*", "D. --"],
+        "answer": "B"
+    },
+    {
+        "question": "Which method adds an item to the end of a list?",
+        "options": ["A. add()", "B. insert()", "C. append()", "D. push()"],
+        "answer": "C"
+    }
+]
+
+
+def display_question(question_data, number):
+    print(f"\nQuestion {number}:")
+    print(question_data["question"])
+
+    for option in question_data["options"]:
+        print(option)
+
+
+def get_answer():
+    while True:
+        answer = input("Enter your answer (A/B/C/D): ").upper().strip()
+
+        if answer in ["A", "B", "C", "D"]:
+            return answer
+
+        print("Invalid answer. Please enter A, B, C, or D.")
+
+
+def calculate_percentage(score, total):
+    return (score / total) * 100
+
+
+def show_result(score, total):
+    percentage = calculate_percentage(score, total)
+
+    print("\n==============================")
+    print("          QUIZ RESULT")
+    print("==============================")
+
+    print("Correct Answers :", score)
+    print("Wrong Answers   :", total - score)
+    print("Total Questions :", total)
+    print(f"Percentage      : {percentage:.2f}%")
+
+    if percentage >= 80:
+        print("Performance     : Excellent!")
+    elif percentage >= 60:
+        print("Performance     : Good!")
+    elif percentage >= 40:
+        print("Performance     : Keep Practicing!")
+    else:
+        print("Performance     : Need More Practice!")
+
+
+def start_quiz():
+    score = 0
+
+    print("\n==============================")
+    print("       PYTHON QUIZ GAME")
+    print("==============================")
+
+    name = input("Enter your name: ")
+
+    print(f"\nWelcome, {name}!")
+    print("Answer all the questions.")
+    print("Let's begin!")
+
+    for number, question_data in enumerate(questions, start=1):
+
+        display_question(question_data, number)
+
+        answer = get_answer()
+
+        if answer == question_data["answer"]:
+            print("Correct! ✓")
+            score += 1
+        else:
+            print(
+                "Wrong! ✗",
+                "Correct answer:",
+                question_data["answer"]
+            )
+
+    show_result(score, len(questions))
+
+
+def main():
+    while True:
+
+        start_quiz()
+
+        print("\nDo you want to play again?")
+        choice = input("Enter Y for Yes or N for No: ").upper().strip()
+
+        if choice == "N":
+            print("\nThank you for playing!")
+            break
+
+        elif choice != "Y":
+            print("Invalid choice. Ending game.")
+            break
+
+
+main()
