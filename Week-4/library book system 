@@ -1,0 +1,94 @@
+# Library Book Management System
+
+library = {
+    "Python Basics": {"author": "John Smith", "available": True},
+    "Artificial Intelligence": {"author": "Andrew Lee", "available": True},
+    "Data Science": {"author": "Sarah Wilson", "available": True},
+    "Machine Learning": {"author": "David Brown", "available": True}
+}
+
+while True:
+    print("\n===== LIBRARY MANAGEMENT SYSTEM =====")
+    print("1. View Books")
+    print("2. Search Book")
+    print("3. Borrow Book")
+    print("4. Return Book")
+    print("5. Add New Book")
+    print("6. Exit")
+
+    choice = input("Enter your choice: ")
+
+    if choice == "1":
+        print("\n----- AVAILABLE BOOKS -----")
+
+        for book, details in library.items():
+            status = "Available" if details["available"] else "Borrowed"
+
+            print(f"\nBook: {book}")
+            print(f"Author: {details['author']}")
+            print(f"Status: {status}")
+
+    elif choice == "2":
+        search = input("Enter book name to search: ").lower()
+
+        found = False
+
+        for book, details in library.items():
+            if search in book.lower():
+                status = "Available" if details["available"] else "Borrowed"
+
+                print("\nBook Found!")
+                print("Title:", book)
+                print("Author:", details["author"])
+                print("Status:", status)
+
+                found = True
+
+        if not found:
+            print("Book not found.")
+
+    elif choice == "3":
+        book = input("Enter book name to borrow: ")
+
+        if book in library:
+            if library[book]["available"]:
+                library[book]["available"] = False
+                print("Book borrowed successfully!")
+            else:
+                print("Sorry, this book is already borrowed.")
+        else:
+            print("Book not found.")
+
+    elif choice == "4":
+        book = input("Enter book name to return: ")
+
+        if book in library:
+            if not library[book]["available"]:
+                library[book]["available"] = True
+                print("Book returned successfully!")
+            else:
+                print("This book was not borrowed.")
+        else:
+            print("Book not found.")
+
+    elif choice == "5":
+        book = input("Enter new book name: ")
+
+        if book in library:
+            print("This book already exists.")
+        else:
+            author = input("Enter author name: ")
+
+            library[book] = {
+                "author": author,
+                "available": True
+            }
+
+            print("New book added successfully!")
+
+    elif choice == "6":
+        print("Thank you for using the Library System!")
+        break
+
+    else:
+        print("Invalid choice. Please select 1-6.")
