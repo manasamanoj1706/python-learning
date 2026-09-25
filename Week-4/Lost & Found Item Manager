@@ -1,0 +1,102 @@
+# Lost & Found Item Manager
+
+items = []
+
+
+def add_item():
+    item_name = input("Enter item name: ")
+    location = input("Where was it found? ")
+    finder = input("Found by: ")
+
+    item = {
+        "name": item_name,
+        "location": location,
+        "finder": finder,
+        "claimed": False
+    }
+
+    items.append(item)
+    print("Item registered successfully!")
+
+
+def display_items():
+    if not items:
+        print("No items recorded.")
+        return
+
+    print("\n--- LOST & FOUND ITEMS ---")
+
+    for number, item in enumerate(items, 1):
+        status = "Claimed" if item["claimed"] else "Available"
+
+        print(f"\nItem {number}")
+        print("Name:", item["name"])
+        print("Location:", item["location"])
+        print("Found by:", item["finder"])
+        print("Status:", status)
+
+
+def search_item():
+    keyword = input("Enter item name to search: ").lower()
+
+    found = False
+
+    for item in items:
+        if keyword in item["name"].lower():
+            print("\nItem Found!")
+            print("Name:", item["name"])
+            print("Location:", item["location"])
+            print("Status:",
+                  "Claimed" if item["claimed"] else "Available")
+            found = True
+
+    if not found:
+        print("No matching item found.")
+
+
+def claim_item():
+    name = input("Enter the item name to claim: ").lower()
+
+    for item in items:
+        if item["name"].lower() == name:
+
+            if item["claimed"]:
+                print("This item has already been claimed.")
+            else:
+                item["claimed"] = True
+                print("Item marked as claimed.")
+
+            return
+
+    print("Item not found.")
+
+
+while True:
+
+    print("\n===== LOST & FOUND MANAGER =====")
+    print("1. Add Found Item")
+    print("2. Display All Items")
+    print("3. Search Item")
+    print("4. Claim Item")
+    print("5. Exit")
+
+    choice = input("Enter your choice: ")
+
+    if choice == "1":
+        add_item()
+
+    elif choice == "2":
+        display_items()
+
+    elif choice == "3":
+        search_item()
+
+    elif choice == "4":
+        claim_item()
+
+    elif choice == "5":
+        print("Program closed.")
+        break
+
+    else:
+        print("Invalid choice!")
