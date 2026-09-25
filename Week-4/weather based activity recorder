@@ -1,0 +1,82 @@
+# Weather-Based Activity Recommender
+
+def get_weather():
+    print("\nChoose today's weather:")
+    print("1. Sunny")
+    print("2. Rainy")
+    print("3. Cloudy")
+    print("4. Windy")
+    print("5. Stormy")
+
+    while True:
+        try:
+            choice = int(input("Enter choice: "))
+
+            if 1 <= choice <= 5:
+                return choice
+
+            print("Choose a number between 1 and 5.")
+
+        except ValueError:
+            print("Enter a valid number.")
+
+
+def recommend_activity(weather):
+    activities = {
+        1: [
+            "Go for a morning walk",
+            "Visit a park",
+            "Try outdoor photography"
+        ],
+        2: [
+            "Read a book",
+            "Watch a movie",
+            "Learn a new programming concept"
+        ],
+        3: [
+            "Go cycling",
+            "Visit a cafe",
+            "Work on a personal project"
+        ],
+        4: [
+            "Fly a kite in a safe open area",
+            "Go for a short walk",
+            "Practice photography"
+        ],
+        5: [
+            "Stay indoors",
+            "Watch a documentary",
+            "Work on a coding project"
+        ]
+    }
+
+    return activities[weather]
+
+
+def show_recommendations():
+    weather = get_weather()
+
+    recommendations = recommend_activity(weather)
+
+    print("\nRecommended Activities:")
+
+    for number, activity in enumerate(recommendations, 1):
+        print(f"{number}. {activity}")
+
+
+def main():
+    print("===== WEATHER ACTIVITY RECOMMENDER =====")
+
+    while True:
+        show_recommendations()
+
+        again = input(
+            "\nDo you want another recommendation? (yes/no): "
+        ).lower()
+
+        if again != "yes":
+            print("Have a great day!")
+            break
+
+
+main()
