@@ -1,0 +1,37 @@
+print("===== STUDENT GRADE ANALYZER =====")
+
+name = input("Enter student name: ")
+
+marks = []
+
+for i in range(5):
+    mark = float(input(f"Enter marks for subject {i + 1}: "))
+    marks.append(mark)
+
+total = sum(marks)
+average = total / len(marks)
+
+if average >= 90:
+    grade = "A+"
+elif average >= 80:
+    grade = "A"
+elif average >= 70:
+    grade = "B"
+elif average >= 60:
+    grade = "C"
+elif average >= 50:
+    grade = "D"
+else:
+    grade = "F"
+
+print("\n===== RESULT =====")
+print(f"Student Name : {name}")
+print(f"Marks        : {marks}")
+print(f"Total Marks  : {total}")
+print(f"Average      : {average:.2f}")
+print(f"Grade        : {grade}")
+
+if average >= 50:
+    print("Result       : PASS")
+else:
+    print("Result       : FAIL")
