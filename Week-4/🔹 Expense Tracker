@@ -1,0 +1,36 @@
+print("===== PERSONAL EXPENSE TRACKER =====")
+
+expenses = {}
+
+def add_expense(category, amount):
+    if category in expenses:
+        expenses[category] += amount
+    else:
+        expenses[category] = amount
+
+n = int(input("How many expenses do you want to enter? "))
+
+for i in range(n):
+    print(f"\nExpense {i + 1}")
+    category = input("Enter category: ").strip().title()
+    amount = float(input("Enter amount: ₹"))
+
+    add_expense(category, amount)
+
+print("\n===== EXPENSE SUMMARY =====")
+
+total = 0
+
+for category, amount in expenses.items():
+    print(f"{category}: ₹{amount:.2f}")
+    total += amount
+
+print("---------------------------")
+print(f"Total Expense: ₹{total:.2f}")
+
+if expenses:
+    highest_category = max(expenses, key=expenses.get)
+    print(f"Highest Spending: {highest_category}")
+    print(f"Amount: ₹{expenses[highest_category]:.2f}")
+else:
+    print("No expenses recorded.")
