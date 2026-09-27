@@ -1,0 +1,41 @@
+print("===== PYTHON QUIZ GAME =====")
+
+questions = {
+    "Which keyword is used to define a function in Python?": "def",
+    "Which data type stores key-value pairs?": "dictionary",
+    "Which symbol is used for comments in Python?": "#",
+    "Which function is used to find the length of a list?": "len",
+    "Which keyword is used to handle exceptions?": "try"
+}
+
+score = 0
+total_questions = len(questions)
+
+print(f"\nThere are {total_questions} questions.")
+print("Type your answers carefully!\n")
+
+for number, (question, correct_answer) in enumerate(questions.items(), start=1):
+    print(f"Question {number}: {question}")
+
+    answer = input("Your answer: ").strip().lower()
+
+    if answer == correct_answer.lower():
+        print("✓ Correct!\n")
+        score += 1
+    else:
+        print(f"✗ Wrong! Correct answer: {correct_answer}\n")
+
+percentage = (score / total_questions) * 100
+
+print("===== FINAL RESULT =====")
+print(f"Score      : {score}/{total_questions}")
+print(f"Percentage : {percentage:.2f}%")
+
+if percentage == 100:
+    print("Excellent! Perfect score!")
+elif percentage >= 60:
+    print("Good job! Keep practicing.")
+else:
+    print("Keep learning and try again!")
+
+print("========================")
