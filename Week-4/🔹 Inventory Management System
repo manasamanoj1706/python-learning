@@ -1,0 +1,88 @@
+print("===== INVENTORY MANAGEMENT SYSTEM =====")
+
+inventory = {
+    "Laptop": 5,
+    "Keyboard": 12,
+    "Mouse": 20,
+    "Headphones": 8
+}
+
+
+def display_inventory():
+    print("\n----- CURRENT INVENTORY -----")
+
+    if not inventory:
+        print("Inventory is empty.")
+        return
+
+    for item, quantity in inventory.items():
+        print(f"{item}: {quantity} units")
+
+
+def add_item():
+    item = input("Enter item name: ").strip().title()
+
+    try:
+        quantity = int(input("Enter quantity: "))
+
+        if quantity <= 0:
+            print("Quantity must be greater than zero.")
+            return
+
+        inventory[item] = inventory.get(item, 0) + quantity
+        print(f"{quantity} {item}(s) added successfully.")
+
+    except ValueError:
+        print("Please enter a valid number.")
+
+
+def remove_item():
+    item = input("Enter item name: ").strip().title()
+
+    if item not in inventory:
+        print("Item not found.")
+        return
+
+    try:
+        quantity = int(input("Enter quantity to remove: "))
+
+        if quantity <= 0:
+            print("Quantity must be greater than zero.")
+        elif quantity > inventory[item]:
+            print("Not enough stock available.")
+        else:
+            inventory[item] -= quantity
+
+            if inventory[item] == 0:
+                del inventory[item]
+
+            print("Item removed successfully.")
+
+    except ValueError:
+        print("Please enter a valid number.")
+
+
+while True:
+    print("\n===== MENU =====")
+    print("1. Display Inventory")
+    print("2. Add Item")
+    print("3. Remove Item")
+    print("4. Exit")
+
+    choice = input("Enter your choice: ")
+
+    if choice == "1":
+        display_inventory()
+
+    elif choice == "2":
+        add_item()
+
+    elif choice == "3":
+        remove_item()
+
+    elif choice == "4":
+        print("Thank you for using the Inventory System!")
+        break
+
+    else:
+        print("Invalid choice. Please try again.")
