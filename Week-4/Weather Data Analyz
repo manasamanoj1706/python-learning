@@ -1,0 +1,44 @@
+temperatures = []
+
+print("===== WEATHER DATA ANALYZER =====")
+
+days = int(input("Enter number of days: "))
+
+for i in range(days):
+    while True:
+        try:
+            temp = float(input(f"Enter temperature for Day {i + 1}: "))
+            temperatures.append(temp)
+            break
+        except ValueError:
+            print("Please enter a valid temperature.")
+
+average = sum(temperatures) / len(temperatures)
+highest = max(temperatures)
+lowest = min(temperatures)
+
+hot_days = 0
+cold_days = 0
+
+for temp in temperatures:
+    if temp >= 35:
+        hot_days += 1
+    elif temp <= 20:
+        cold_days += 1
+
+print("\n===== WEATHER REPORT =====")
+print("Temperatures:", temperatures)
+print(f"Average Temperature: {average:.2f}°C")
+print(f"Highest Temperature: {highest:.2f}°C")
+print(f"Lowest Temperature: {lowest:.2f}°C")
+print("Hot Days:", hot_days)
+print("Cold Days:", cold_days)
+
+if average >= 35:
+    print("Overall Weather: Very Hot")
+elif average >= 30:
+    print("Overall Weather: Hot")
+elif average >= 20:
+    print("Overall Weather: Moderate")
+else:
+    print("Overall Weather: Cool")
