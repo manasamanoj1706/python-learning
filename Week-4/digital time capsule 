@@ -1,0 +1,78 @@
+from datetime import datetime
+
+time_capsules = {}
+
+while True:
+    print("\n===== DIGITAL TIME CAPSULE =====")
+    print("1. Create Capsule")
+    print("2. Open Capsule")
+    print("3. View Capsules")
+    print("4. Delete Capsule")
+    print("5. Exit")
+
+    choice = input("Enter your choice: ")
+
+    if choice == "1":
+        capsule_id = input("Enter capsule ID: ")
+        message = input("Enter your secret message: ")
+        unlock_date = input("Enter unlock date (YYYY-MM-DD): ")
+
+        try:
+            datetime.strptime(unlock_date, "%Y-%m-%d")
+
+            time_capsules[capsule_id] = {
+                "message": message,
+                "unlock_date": unlock_date,
+                "created": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            }
+
+            print("Time capsule created successfully!")
+
+        except ValueError:
+            print("Invalid date format.")
+
+    elif choice == "2":
+        capsule_id = input("Enter capsule ID: ")
+
+        if capsule_id not in time_capsules:
+            print("Capsule not found.")
+        else:
+            capsule = time_capsules[capsule_id]
+            today = datetime.now().date()
+            unlock_date = datetime.strptime(
+                capsule["unlock_date"], "%Y-%m-%d"
+            ).date()
+
+            if today >= unlock_date:
+                print("\n🔓 CAPSULE UNLOCKED!")
+                print("Message:", capsule["message"])
+            else:
+                remaining = (unlock_date - today).days
+                print(f"🔒 Capsule is locked for {remaining} more day(s).")
+
+    elif choice == "3":
+        if not time_capsules:
+            print("No capsules available.")
+        else:
+            print("\n--- YOUR CAPSULES ---")
+
+            for capsule_id, capsule in time_capsules.items():
+                print(f"\nID: {capsule_id}")
+                print(f"Created: {capsule['created']}")
+                print(f"Unlock Date: {capsule['unlock_date']}")
+
+    elif choice == "4":
+        capsule_id = input("Enter capsule ID: ")
+
+        if capsule_id in time_capsules:
+            del time_capsules[capsule_id]
+            print("Capsule deleted.")
+        else:
+            print("Capsule not found.")
+
+    elif choice == "5":
+        print("Closing time capsule...")
+        break
+
+    else:
+        print("Invalid choice.")
