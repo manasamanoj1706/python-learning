@@ -1,0 +1,84 @@
+library = {}
+
+while True:
+    print("\n===== LIBRARY MANAGEMENT =====")
+    print("1. Add Book")
+    print("2. Borrow Book")
+    print("3. Return Book")
+    print("4. View Books")
+    print("5. Search Book")
+    print("6. Exit")
+
+    choice = input("Enter your choice: ")
+
+    if choice == "1":
+        book_id = input("Enter book ID: ")
+        title = input("Enter book title: ")
+        author = input("Enter author name: ")
+
+        library[book_id] = {
+            "title": title,
+            "author": author,
+            "available": True
+        }
+
+        print("Book added successfully.")
+
+    elif choice == "2":
+        book_id = input("Enter book ID: ")
+
+        if book_id not in library:
+            print("Book not found.")
+        elif not library[book_id]["available"]:
+            print("Book is already borrowed.")
+        else:
+            library[book_id]["available"] = False
+            print("Book borrowed successfully.")
+
+    elif choice == "3":
+        book_id = input("Enter book ID: ")
+
+        if book_id not in library:
+            print("Book not found.")
+        elif library[book_id]["available"]:
+            print("This book is already available.")
+        else:
+            library[book_id]["available"] = True
+            print("Book returned successfully.")
+
+    elif choice == "4":
+        if not library:
+            print("Library is empty.")
+        else:
+            print("\n--- BOOK LIST ---")
+
+            for book_id, book in library.items():
+                status = "Available" if book["available"] else "Borrowed"
+
+                print(f"\nID     : {book_id}")
+                print(f"Title  : {book['title']}")
+                print(f"Author : {book['author']}")
+                print(f"Status : {status}")
+
+    elif choice == "5":
+        search = input("Enter title or author to search: ").lower()
+        found = False
+
+        for book_id, book in library.items():
+            if (search in book["title"].lower() or
+                    search in book["author"].lower()):
+
+                print(f"\nBook ID : {book_id}")
+                print(f"Title   : {book['title']}")
+                print(f"Author  : {book['author']}")
+                found = True
+
+        if not found:
+            print("No matching book found.")
+
+    elif choice == "6":
+        print("Exiting library system...")
+        break
+
+    else:
+        print("Invalid choice.")
