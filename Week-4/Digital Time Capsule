@@ -1,0 +1,70 @@
+from datetime import datetime
+import json
+import os
+
+FILE = "time_capsule.json"
+
+
+def load_capsule():
+    if os.path.exists(FILE):
+        with open(FILE, "r") as file:
+            return json.load(file)
+    return []
+
+
+def save_capsule(data):
+    with open(FILE, "w") as file:
+        json.dump(data, file, indent=4)
+
+
+def add_memory(capsule):
+    message = input("Write your memory: ")
+
+    entry = {
+        "date": datetime.now().strftime("%d-%m-%Y"),
+        "time": datetime.now().strftime("%H:%M:%S"),
+        "message": message
+    }
+
+    capsule.append(entry)
+    save_capsule(capsule)
+
+    print("Memory stored successfully!")
+
+
+def view_memories(capsule):
+    if not capsule:
+        print("No memories found.")
+        return
+
+    print("\n===== YOUR TIME CAPSULE =====")
+
+    for i, memory in enumerate(capsule, start=1):
+        print(f"\nMemory {i}")
+        print("Date:", memory["date"])
+        print("Time:", memory["time"])
+        print("Message:", memory["message"])
+
+
+capsule = load_capsule()
+
+while True:
+    print("\n===== DIGITAL TIME CAPSULE =====")
+    print("1. Add Memory")
+    print("2. View Memories")
+    print("3. Exit")
+
+    choice = input("Choose an option: ")
+
+    if choice == "1":
+        add_memory(capsule)
+
+    elif choice == "2":
+        view_memories(capsule)
+
+    elif choice == "3":
+        print("Time capsule closed.")
+        break
+
+    else:
+        print("Invalid choice!")
