@@ -1,0 +1,56 @@
+import os
+import hashlib
+
+
+def calculate_hash(filepath):
+    hasher = hashlib.sha256()
+
+    with open(filepath, "rb") as file:
+        while chunk := file.read(4096):
+            hasher.update(chunk)
+
+    return hasher.hexdigest()
+
+
+def find_duplicates(folder):
+    file_hashes = {}
+    duplicates = []
+
+    for root, folders, files in os.walk(folder):
+        for filename in files:
+            filepath = os.path.join(root, filename)
+
+            try:
+                file_hash = calculate_hash(filepath)
+
+                if file_hash in file_hashes:
+                    duplicates.append((filepath, file_hashes[file_hash]))
+                else:
+                    file_hashes[file_hash] = filepath
+
+            except PermissionError:
+                print("Skipped:", filepath)
+
+    return duplicates
+
+
+print("===== DUPLICATE FILE DETECTOR =====")
+
+folder = input("Enter folder path: ")
+
+if not os.path.isdir(folder):
+    print("Invalid folder path!")
+
+else:
+    duplicates = find_duplicates(folder)
+
+    if duplicates:
+        print("\nDuplicate files found:\n")
+
+        for duplicate, original in duplicates:
+            print("Duplicate :", duplicate)
+            print("Original  :", original)
+            print("-" * 50)
+
+    else:
+        print("\nNo duplicate files found.")
