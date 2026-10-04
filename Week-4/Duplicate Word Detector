@@ -1,0 +1,16 @@
+import re
+from collections import Counter
+
+text = input("Enter a sentence: ")
+
+words = re.findall(r'\b[a-zA-Z]+\b', text.lower())
+counts = Counter(words)
+
+duplicates = {word: count for word, count in counts.items() if count > 1}
+
+if duplicates:
+    print("\nRepeated words:")
+    for word, count in duplicates.items():
+        print(f"{word} → {count} times")
+else:
+    print("\nNo repeated words found.")
