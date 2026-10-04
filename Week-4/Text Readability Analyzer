@@ -1,0 +1,29 @@
+import re
+
+text = input("Enter a paragraph:\n")
+
+sentences = re.split(r'[.!?]+', text)
+sentences = [s.strip() for s in sentences if s.strip()]
+
+words = re.findall(r'\b[a-zA-Z]+\b', text)
+
+if not words:
+    print("No words found.")
+else:
+    longest_word = max(words, key=len)
+    average = len(words) / len(sentences)
+
+    print("\n--- Text Analysis ---")
+    print("Words:", len(words))
+    print("Sentences:", len(sentences))
+    print("Average words/sentence:", round(average, 2))
+    print("Longest word:", longest_word)
+
+    if average < 10:
+        level = "Easy"
+    elif average < 20:
+        level = "Moderate"
+    else:
+        level = "Difficult"
+
+    print("Reading level:", level)
