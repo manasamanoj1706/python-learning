@@ -1,0 +1,18 @@
+numbers = input("Enter numbers separated by spaces: ")
+
+numbers = [int(x) for x in numbers.split()]
+numbers.sort()
+
+missing = []
+
+for i in range(numbers[0], numbers[-1] + 1):
+    if i not in numbers:
+        missing.append(i)
+
+if missing:
+    print("Missing numbers:", missing)
+else:
+    print("No numbers are missing!")
+
+print("Smallest number:", numbers[0])
+print("Largest number:", numbers[-1])
