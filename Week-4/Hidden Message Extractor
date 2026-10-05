@@ -1,0 +1,14 @@
+sentence = input("Enter a sentence: ")
+
+words = sentence.split()
+
+if len(words) < 2:
+    print("Please enter at least two words.")
+else:
+    hidden_message = ""
+
+    for word in words:
+        hidden_message += word[0]
+
+    print("\nHidden message:", hidden_message.upper())
+    print("Number of words:", len(words))
