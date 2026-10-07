@@ -1,0 +1,29 @@
+from urllib.parse import urlparse
+
+url = input("Enter a website URL: ")
+
+if not url.startswith(("http://", "https://")):
+    url = "https://" + url
+
+result = urlparse(url)
+
+print("\n--- URL Analysis ---")
+print("Full URL   :", url)
+print("Protocol   :", result.scheme)
+print("Domain     :", result.netloc)
+print("Path       :", result.path if result.path else "/")
+
+if result.scheme == "https":
+    print("Security   : HTTPS enabled 🔒")
+else:
+    print("Security   : HTTPS not enabled ⚠️")
+
+if result.query:
+    print("Parameters :", result.query)
+else:
+    print("Parameters : None")
+
+if result.fragment:
+    print("Fragment   :", result.fragment)
+else:
+    print("Fragment   : None")
