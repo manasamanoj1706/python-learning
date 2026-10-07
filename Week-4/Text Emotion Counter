@@ -1,0 +1,34 @@
+emotions = {
+    "happy": ["happy", "joy", "great", "awesome", "excited", "love"],
+    "sad": ["sad", "cry", "lonely", "upset", "hurt", "depressed"],
+    "angry": ["angry", "hate", "furious", "annoyed", "mad"],
+    "fear": ["afraid", "scared", "fear", "worried", "nervous"],
+    "surprise": ["wow", "surprised", "unexpected", "shocked"]
+}
+
+text = input("Enter a sentence: ").lower()
+
+words = text.split()
+scores = {}
+
+for emotion, keywords in emotions.items():
+    count = 0
+
+    for word in words:
+        word = word.strip(".,!?")
+        if word in keywords:
+            count += 1
+
+    scores[emotion] = count
+
+print("\n--- Emotion Analysis ---")
+
+for emotion, score in scores.items():
+    print(f"{emotion.capitalize():10}: {score}")
+
+highest = max(scores, key=scores.get)
+
+if scores[highest] == 0:
+    print("\nNo clear emotion detected.")
+else:
+    print(f"\nDominant emotion: {highest.capitalize()}")
