@@ -1,0 +1,56 @@
+import re
+from collections import Counter
+from datetime import datetime
+
+
+def analyze_text(text):
+    words = re.findall(r"\b[a-zA-Z0-9']+\b", text.lower())
+
+    if not words:
+        print("No valid words found.")
+        return
+
+    frequency = Counter(words)
+    unique_words = set(words)
+
+    print("\n" + "=" * 40)
+    print("       DIGITAL FOOTPRINT REPORT")
+    print("=" * 40)
+
+    print(f"Total words       : {len(words)}")
+    print(f"Unique words      : {len(unique_words)}")
+    print(f"Repeated words    : {len(words) - len(unique_words)}")
+    print(f"Longest word      : {max(unique_words, key=len)}")
+    print(f"Reading time      : {max(1, round(len(words) / 200))} minute(s)")
+
+    print("\nTop 5 frequent words:")
+    for word, count in frequency.most_common(5):
+        print(f"{word:<20} {count} time(s)")
+
+    print("\nWords in alphabetical order:")
+    print(", ".join(sorted(unique_words)))
+
+    print(f"\nAnalyzed on: {datetime.now():%d-%m-%Y %H:%M}")
+    print("=" * 40)
+
+
+def main():
+    print("DIGITAL FOOTPRINT ANALYZER")
+    print("Enter a paragraph (type END on a new line to finish):\n")
+
+    lines = []
+
+    while True:
+        line = input()
+
+        if line.strip().upper() == "END":
+            break
+
+        lines.append(line)
+
+    text = " ".join(lines)
+    analyze_text(text)
+
+
+if __name__ == "__main__":
+    main()
