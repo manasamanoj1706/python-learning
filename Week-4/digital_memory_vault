@@ -1,0 +1,99 @@
+import json
+import os
+from datetime import datetime
+
+FILE_NAME = "memory_vault.json"
+
+
+def load_memories():
+    if not os.path.exists(FILE_NAME):
+        return []
+
+    try:
+        with open(FILE_NAME, "r", encoding="utf-8") as file:
+            return json.load(file)
+    except (json.JSONDecodeError, OSError):
+        print("Warning: Could not read the memory vault.")
+        return []
+
+
+def save_memories(memories):
+    with open(FILE_NAME, "w", encoding="utf-8") as file:
+        json.dump(memories, file, indent=4, ensure_ascii=False)
+
+
+def add_memory(memories):
+    title = input("Enter memory title: ").strip()
+    note = input("Write your memory: ").strip()
+
+    if not title or not note:
+        print("Title and memory cannot be empty.")
+        return
+
+    memory = {
+        "id": len(memories) + 1,
+        "title": title,
+        "note": note,
+        "created_at": datetime.now().strftime("%d-%m-%Y %H:%M")
+    }
+
+    memories.append(memory)
+    save_memories(memories)
+    print("Memory saved successfully!")
+
+
+def view_memories(memories):
+    if not memories:
+        print("Your memory vault is empty.")
+        return
+
+    for memory in memories:
+        print(f"\nID: {memory['id']}")
+        print(f"Title: {memory['title']}")
+        print(f"Memory: {memory['note']}")
+        print(f"Created: {memory['created_at']}")
+
+
+def search_memories(memories):
+    keyword = input("Enter a keyword to search: ").strip().lower()
+
+    results = [
+        memory for memory in memories
+        if keyword in memory["title"].lower()
+        or keyword in memory["note"].lower()
+    ]
+
+    if results:
+        for memory in results:
+            print(f"\n{memory['title']}: {memory['note']}")
+    else:
+        print("No matching memories found.")
+
+
+def main():
+    memories = load_memories()
+
+    while True:
+        print("\n===== DIGITAL MEMORY VAULT =====")
+        print("1. Add a memory")
+        print("2. View all memories")
+        print("3. Search memories")
+        print("4. Exit")
+
+        choice = input("Choose an option: ").strip()
+
+        if choice == "1":
+            add_memory(memories)
+        elif choice == "2":
+            view_memories(memories)
+        elif choice == "3":
+            search_memories(memories)
+        elif choice == "4":
+            print("Your memories are saved. Goodbye!")
+            break
+        else:
+            print("Invalid choice. Try again.")
+
+
+if __name__ == "__main__":
+    main()
