@@ -1,0 +1,104 @@
+
+import hashlib
+import json
+from pathlib import Path
+
+DATABASE = Path("file_hashes.json")
+
+
+def calculate_hash(file_path):
+    sha256 = hashlib.sha256()
+
+    with open(file_path, "rb") as file:
+        for chunk in iter(lambda: file.read(4096), b""):
+            sha256.update(chunk)
+
+    return sha256.hexdigest()
+
+
+def load_database():
+    if DATABASE.exists():
+        try:
+            return json.loads(
+                DATABASE.read_text(encoding="utf-8")
+            )
+        except (json.JSONDecodeError, OSError):
+            print("Warning: Could not read the hash database.")
+
+    return {}
+
+
+def save_database(database):
+    DATABASE.write_text(
+        json.dumps(database, indent=4),
+        encoding="utf-8"
+    )
+
+
+def register_file(database):
+    path = Path(input("Enter file path: ").strip().strip('"'))
+
+    if not path.is_file():
+        print("Error: File does not exist.")
+        return
+
+    try:
+        file_hash = calculate_hash(path)
+        database[str(path.resolve())] = file_hash
+        save_database(database)
+
+        print("File registered successfully!")
+        print("SHA-256:", file_hash)
+
+    except OSError as error:
+        print("Could not read file:", error)
+
+
+def verify_file(database):
+    path = Path(input("Enter file path: ").strip().strip('"'))
+    key = str(path.resolve())
+
+    if key not in database:
+        print("File has not been registered yet.")
+        return
+
+    if not path.is_file():
+        print("WARNING: Registered file is missing!")
+        return
+
+    try:
+        current_hash = calculate_hash(path)
+
+        if current_hash == database[key]:
+            print("INTEGRITY CHECK PASSED: No change detected.")
+        else:
+            print("WARNING: File contents have changed!")
+
+    except OSError as error:
+        print("Could not verify file:", error)
+
+
+def main():
+    database = load_database()
+
+    while True:
+        print("\n=== FILE INTEGRITY GUARDIAN ===")
+        print("1. Register a file")
+        print("2. Verify a file")
+        print("3. Exit")
+
+        choice = input("Choose: ").strip()
+
+        if choice == "1":
+            register_file(database)
+        elif choice == "2":
+            verify_file(database)
+        elif choice == "3":
+            print("Guardian shutting down.")
+            break
+        else:
+            print("Invalid option!")
+
+
+if __name__ == "__main__":
+    main()
