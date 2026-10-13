@@ -1,0 +1,44 @@
+
+import re
+from collections import Counter
+
+def analyze_footprint(text):
+    emails = re.findall(
+        r"\b[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}\b", text
+    )
+
+    urls = re.findall(
+        r"https?://\S+", text
+    )
+
+    words = re.findall(r"\b\w+\b", text)
+    numbers = re.findall(r"\b\d+\b", text)
+
+    common_words = Counter(
+        word.lower() for word in words
+        if len(word) > 3
+    )
+
+    print("\n===== DIGITAL FOOTPRINT REPORT =====")
+    print("Total words:", len(words))
+    print("Numbers found:", len(numbers))
+    print("Email addresses:", len(emails))
+    print("URLs found:", len(urls))
+
+    print("\nEmail patterns:", emails)
+    print("URL patterns:", urls)
+
+    print("\nMost frequent words:")
+    for word, count in common_words.most_common(5):
+        print(f"{word}: {count}")
+
+    if emails or urls:
+        print("\nPrivacy reminder: Review exposed contact details and links.")
+    else:
+        print("\nNo email addresses or URLs detected.")
+
+    print("\nAnalysis complete!")
+
+print("PERSONAL DIGITAL FOOTPRINT ANALYZER")
+user_text = input("Enter text to analyze: ")
+analyze_footprint(user_text)
