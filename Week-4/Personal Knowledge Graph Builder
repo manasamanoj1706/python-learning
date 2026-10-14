@@ -1,0 +1,127 @@
+import json
+from collections import defaultdict, deque
+
+FILE_NAME = "knowledge_graph.json"
+
+
+def load_graph():
+    try:
+        with open(FILE_NAME, "r") as file:
+            return json.load(file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {}
+
+
+def save_graph(graph):
+    with open(FILE_NAME, "w") as file:
+        json.dump(graph, file, indent=4)
+
+
+def add_connection(graph):
+    topic = input("Enter a topic: ").strip().lower()
+    related = input("Enter a related topic: ").strip().lower()
+
+    if not topic or not related:
+        print("Topics cannot be empty.")
+        return
+
+    if topic == related:
+        print("A topic cannot connect to itself.")
+        return
+
+    graph.setdefault(topic, [])
+    graph.setdefault(related, [])
+
+    if related not in graph[topic]:
+        graph[topic].append(related)
+
+    if topic not in graph[related]:
+        graph[related].append(topic)
+
+    save_graph(graph)
+    print(f"Connected '{topic}' with '{related}'.")
+
+
+def explore_topic(graph):
+    topic = input("Enter a topic to explore: ").strip().lower()
+
+    if topic not in graph:
+        print("Topic not found.")
+        return
+
+    print(f"\nConnections for '{topic}':")
+
+    for related in graph[topic]:
+        print(f"  -> {related}")
+
+    if not graph[topic]:
+        print("No connections yet.")
+
+
+def find_path(graph):
+    start = input("Starting topic: ").strip().lower()
+    target = input("Destination topic: ").strip().lower()
+
+    if start not in graph or target not in graph:
+        print("One or both topics do not exist.")
+        return
+
+    queue = deque([(start, [start])])
+    visited = {start}
+
+    while queue:
+        current, path = queue.popleft()
+
+        if current == target:
+            print("Connection path:", " -> ".join(path))
+            return
+
+        for neighbor in graph[current]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append((neighbor, path + [neighbor]))
+
+    print("No connection path found.")
+
+
+def show_all_topics(graph):
+    if not graph:
+        print("Your knowledge graph is empty.")
+        return
+
+    print("\n--- KNOWLEDGE GRAPH ---")
+
+    for topic, connections in sorted(graph.items()):
+        print(f"{topic}: {', '.join(connections) or 'No connections'}")
+
+
+def main():
+    graph = load_graph()
+
+    while True:
+        print("\n===== KNOWLEDGE GRAPH BUILDER =====")
+        print("1. Add topic connection")
+        print("2. Explore a topic")
+        print("3. Find connection path")
+        print("4. Show all topics")
+        print("5. Exit")
+
+        choice = input("Choose an option: ").strip()
+
+        if choice == "1":
+            add_connection(graph)
+        elif choice == "2":
+            explore_topic(graph)
+        elif choice == "3":
+            find_path(graph)
+        elif choice == "4":
+            show_all_topics(graph)
+        elif choice == "5":
+            print("Knowledge graph saved. Goodbye!")
+            break
+        else:
+            print("Invalid choice. Try again.")
+
+
+if __name__ == "__main__":
+    main()
