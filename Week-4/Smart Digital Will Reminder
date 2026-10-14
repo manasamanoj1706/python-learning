@@ -1,0 +1,83 @@
+import json
+from datetime import datetime, timedelta
+
+FILE_NAME = "reminders.json"
+
+def load_reminders():
+    try:
+        with open(FILE_NAME, "r") as file:
+            return json.load(file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return []
+
+def save_reminders(reminders):
+    with open(FILE_NAME, "w") as file:
+        json.dump(reminders, file, indent=4)
+
+def add_reminder(reminders):
+    title = input("Enter reminder title: ")
+    days = int(input("Due in how many days? "))
+
+    due_date = datetime.now() + timedelta(days=days)
+
+    reminder = {
+        "title": title,
+        "due_date": due_date.strftime("%Y-%m-%d"),
+        "created_at": datetime.now().strftime("%Y-%m-%d %H:%M")
+    }
+
+    reminders.append(reminder)
+    save_reminders(reminders)
+
+    print("Reminder saved successfully!")
+
+def view_reminders(reminders):
+    if not reminders:
+        print("No reminders available.")
+        return
+
+    today = datetime.now().date()
+
+    for reminder in reminders:
+        due_date = datetime.strptime(
+            reminder["due_date"], "%Y-%m-%d"
+        ).date()
+
+        remaining = (due_date - today).days
+
+        if remaining < 0:
+            status = "OVERDUE"
+        elif remaining == 0:
+            status = "DUE TODAY"
+        elif remaining <= 3:
+            status = "URGENT"
+        else:
+            status = "UPCOMING"
+
+        print(f"\nTask: {reminder['title']}")
+        print(f"Due date: {reminder['due_date']}")
+        print(f"Status: {status}")
+
+def main():
+    reminders = load_reminders()
+
+    while True:
+        print("\n===== SMART REMINDER SYSTEM =====")
+        print("1. Add Reminder")
+        print("2. View Reminders")
+        print("3. Exit")
+
+        choice = input("Choose an option: ")
+
+        if choice == "1":
+            add_reminder(reminders)
+        elif choice == "2":
+            view_reminders(reminders)
+        elif choice == "3":
+            print("Thank you for using Smart Reminder!")
+            break
+        else:
+            print("Invalid choice. Try again.")
+
+if __name__ == "__main__":
+    main()
