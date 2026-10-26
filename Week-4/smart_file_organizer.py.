@@ -1,0 +1,66 @@
+
+from pathlib import Path
+import shutil
+
+CATEGORIES = {
+    "Images": [".jpg", ".jpeg", ".png", ".gif", ".webp"],
+    "Documents": [".pdf", ".docx", ".doc", ".txt", ".xlsx", ".pptx"],
+    "Videos": [".mp4", ".mkv", ".mov", ".avi"],
+    "Audio": [".mp3", ".wav", ".aac", ".flac"],
+    "Archives": [".zip", ".rar", ".7z", ".tar"],
+    "Code": [".py", ".java", ".cpp", ".html", ".css", ".js"]
+}
+
+
+def get_category(extension):
+    for category, extensions in CATEGORIES.items():
+        if extension in extensions:
+            return category
+    return "Other"
+
+
+def organize_folder(folder):
+    folder = Path(folder).expanduser()
+
+    if not folder.is_dir():
+        print("Error: Folder does not exist.")
+        return
+
+    moved = 0
+    skipped = 0
+
+    for file in list(folder.iterdir()):
+        if not file.is_file():
+            continue
+
+        category = get_category(file.suffix.lower())
+        destination_folder = folder / category
+        destination = destination_folder / file.name
+
+        if destination.exists():
+            print(f"Skipped duplicate: {file.name}")
+            skipped += 1
+            continue
+
+        try:
+            destination_folder.mkdir(exist_ok=True)
+            shutil.move(str(file), str(destination))
+            print(f"Moved {file.name} -> {category}/")
+            moved += 1
+        except OSError as error:
+            print(f"Could not move {file.name}: {error}")
+
+    print("\n--- ORGANIZATION REPORT ---")
+    print(f"Files organized: {moved}")
+    print(f"Files skipped: {skipped}")
+    print("Organization complete!")
+
+
+def main():
+    print("=== SMART FILE ORGANIZER ===")
+    folder = input("Enter the folder path to organize: ").strip()
+    organize_folder(folder)
+
+
+if __name__ == "__main__":
+    main()
