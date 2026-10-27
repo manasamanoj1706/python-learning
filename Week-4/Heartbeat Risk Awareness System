@@ -1,0 +1,43 @@
+# Heartbeat Risk Awareness System
+# Python GitHub Project
+
+print("=" * 40)
+print("   HEARTBEAT RISK AWARENESS SYSTEM")
+print("=" * 40)
+
+try:
+    name = input("Enter your name: ")
+    age = int(input("Enter your age: "))
+    heart_rate = int(input("Enter resting heart rate (BPM): "))
+
+    print("\n--- HEART RATE REPORT ---")
+    print(f"Name: {name}")
+    print(f"Age: {age}")
+    print(f"Heart Rate: {heart_rate} BPM")
+
+    if age <= 0 or heart_rate <= 0:
+        print("Invalid input. Enter positive values.")
+
+    elif age < 18:
+        print("Adult heart-rate ranges do not apply.")
+        print("Consult a healthcare professional for interpretation.")
+
+    elif heart_rate < 60:
+        print("Below the usual adult resting range.")
+        print("This may be normal for some people.")
+
+    elif heart_rate <= 100:
+        print("Within the usual adult resting range.")
+
+    else:
+        print("Above the usual adult resting range.")
+        print("Rest and recheck your heartbeat.")
+        print("Seek medical advice if it remains elevated.")
+
+    print("\nThis tool is for educational purposes only.")
+
+except ValueError:
+    print("Error: Please enter valid numeric values.")
+
+finally:
+    print("\nThank you for using the system!")
