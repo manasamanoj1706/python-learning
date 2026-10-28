@@ -1,0 +1,94 @@
+
+import json
+from collections import defaultdict
+from pathlib import Path
+
+FILE = Path("expenses.json")
+
+
+def load_expenses():
+    if FILE.exists():
+        try:
+            return json.loads(FILE.read_text())
+        except (json.JSONDecodeError, OSError):
+            print("Could not read saved expenses.")
+    return []
+
+
+def save_expenses(expenses):
+    FILE.write_text(json.dumps(expenses, indent=4))
+
+
+def add_expense(expenses):
+    category = input("Category (food/travel/study/other): ").strip().lower()
+    description = input("Description: ").strip()
+
+    try:
+        amount = float(input("Amount (₹): "))
+        if amount <= 0:
+            print("Amount must be greater than zero.")
+            return
+    except ValueError:
+        print("Please enter a valid number.")
+        return
+
+    expenses.append({
+        "category": category,
+        "description": description,
+        "amount": amount
+    })
+    save_expenses(expenses)
+    print("Expense saved successfully!")
+
+
+def show_report(expenses):
+    if not expenses:
+        print("No expenses recorded yet.")
+        return
+
+    totals = defaultdict(float)
+
+    for expense in expenses:
+        totals[expense["category"]] += expense["amount"]
+
+    total = sum(totals.values())
+
+    print("\n--- EXPENSE REPORT ---")
+    for category, amount in sorted(totals.items()):
+        print(f"{category.title():12} ₹{amount:.2f}")
+
+    print("-" * 25)
+    print(f"Total spent: ₹{total:.2f}")
+    print(f"Number of expenses: {len(expenses)}")
+
+    highest = max(expenses, key=lambda item: item["amount"])
+    print(
+        f"Largest expense: {highest['description']} "
+        f"(₹{highest['amount']:.2f})"
+    )
+
+
+def main():
+    expenses = load_expenses()
+
+    while True:
+        print("\n=== SMART EXPENSE ANALYZER ===")
+        print("1. Add expense")
+        print("2. View report")
+        print("3. Exit")
+
+        choice = input("Choose an option: ").strip()
+
+        if choice == "1":
+            add_expense(expenses)
+        elif choice == "2":
+            show_report(expenses)
+        elif choice == "3":
+            print("Thank you for using the analyzer!")
+            break
+        else:
+            print("Invalid choice. Try again.")
+
+
+if __name__ == "__main__":
+    main()
