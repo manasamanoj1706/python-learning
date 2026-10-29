@@ -1,0 +1,77 @@
+
+from collections import Counter
+import re
+
+EMOTIONS = {
+    "Happy": [
+        "happy", "joy", "excited", "wonderful",
+        "love", "great", "amazing", "thankful"
+    ],
+    "Sad": [
+        "sad", "lonely", "cry", "upset",
+        "miss", "hurt", "disappointed", "unhappy"
+    ],
+    "Angry": [
+        "angry", "hate", "annoyed", "furious",
+        "irritated", "terrible", "unfair"
+    ],
+    "Fearful": [
+        "afraid", "scared", "worried", "nervous",
+        "anxious", "panic", "fear"
+    ]
+}
+
+
+def clean_text(text):
+    return re.findall(r"\b[a-zA-Z']+\b", text.lower())
+
+
+def analyze_emotions(text):
+    words = clean_text(text)
+    word_counts = Counter(words)
+    scores = {}
+
+    for emotion, keywords in EMOTIONS.items():
+        scores[emotion] = sum(
+            word_counts[word] for word in keywords
+        )
+
+    if not words:
+        return "No text", scores, 0
+
+    highest_score = max(scores.values())
+
+    if highest_score == 0:
+        result = "Neutral"
+    else:
+        result = max(scores, key=scores.get)
+
+    return result, scores, len(words)
+
+
+def main():
+    print("=" * 40)
+    print("      SMART TEXT EMOTION ANALYZER")
+    print("=" * 40)
+
+    text = input("\nEnter a sentence: ").strip()
+
+    emotion, scores, word_count = analyze_emotions(text)
+
+    if word_count == 0:
+        print("Please enter some text.")
+        return
+
+    print("\n--- ANALYSIS REPORT ---")
+    print(f"Word count: {word_count}")
+    print(f"Detected tone: {emotion}")
+
+    print("\nEmotion scores:")
+    for name, score in scores.items():
+        print(f"{name}: {score}")
+
+    print("\nAnalysis completed!")
+
+
+if __name__ == "__main__":
+    main()
