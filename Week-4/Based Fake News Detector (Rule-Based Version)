@@ -1,0 +1,62 @@
+
+import re
+
+suspicious_words = [
+    "shocking", "secret", "miracle", "guaranteed",
+    "breaking", "100% true", "share immediately",
+    "you won't believe", "government hiding"
+]
+
+reliable_words = [
+    "research", "study", "official", "report",
+    "evidence", "according to"
+]
+
+def analyze_news(text):
+    text_lower = text.lower()
+
+    suspicious_found = []
+    reliable_found = []
+
+    for word in suspicious_words:
+        if word in text_lower:
+            suspicious_found.append(word)
+
+    for word in reliable_words:
+        if word in text_lower:
+            reliable_found.append(word)
+
+    score = len(suspicious_found) - len(reliable_found)
+
+    print("\n----- NEWS ANALYSIS -----")
+
+    print("Suspicious keywords:", suspicious_found)
+    print("Evidence-related keywords:", reliable_found)
+
+    if score >= 2:
+        print("Result: HIGH SUSPICION")
+    elif score > 0:
+        print("Result: NEEDS VERIFICATION")
+    else:
+        print("Result: NO OBVIOUS WARNING SIGNS")
+
+    print("\nImportant: This is only a keyword-based check.")
+    print("It cannot confirm whether news is true or false.")
+
+def main():
+    print("===== FAKE NEWS DETECTOR =====")
+
+    while True:
+        news = input("\nEnter news text (or type exit): ")
+
+        if news.lower() == "exit":
+            print("Thank you!")
+            break
+
+        if not news.strip():
+            print("Please enter some text.")
+            continue
+
+        analyze_news(news)
+
+main()
